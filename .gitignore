@@ -1,0 +1,40 @@
+# ===== Node / Next.js =====
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
+
+# ===== Build-data output (sinh lại từ crawler/output/) =====
+web/public/data/
+
+# ===== Logs =====
+*.log
+dev.log
+build.log
+crawler/output/*_crawl.log
+crawler/output/*/crawl.log
+
+# ===== Files thăm dò crawler (đã hoàn thành sứ mệnh) =====
+crawler/probe.py
+crawler/probe_*.py
+crawler/probe_*.html
+crawler/probe_*.json
+crawler/tv_page*.html
+crawler/tv_ch*.html
+
+# ===== Claude Code / OMC state — tuyệt đối không đẩy =====
+.claude/
+.omc/
+
+# ===== Environment / IDE / OS =====
+.env
+.env.local
+.env*.local
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# ===== Vercel =====
+.vercel/

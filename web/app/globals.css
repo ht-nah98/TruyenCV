@@ -1,0 +1,615 @@
+:root {
+  /* Theme sáng (mặc định) */
+  --bg: #f5f3ec;
+  --bg-elev: #fffdf7;
+  --fg: #2b2b2b;
+  --fg-muted: #6b6b6b;
+  --border: #e0dccf;
+  --accent: #b5651d;
+  --accent-fg: #ffffff;
+  --link: #1f6feb;
+
+  /* Biến đọc truyện — chỉnh bởi người dùng, lưu localStorage */
+  --reader-font-size: 20px;
+  --reader-line-height: 1.8;
+  --reader-font-family: Georgia, "Times New Roman", serif;
+  --reader-width: 720px;
+  --reader-para-gap: 1em;
+}
+
+[data-theme="dark"] {
+  --bg: #1a1a1a;
+  --bg-elev: #242424;
+  --fg: #d6d3cb;
+  --fg-muted: #8a8a8a;
+  --border: #3a3a3a;
+  --accent: #d98a4e;
+  --accent-fg: #1a1a1a;
+  --link: #6cb6ff;
+}
+
+[data-theme="sepia"] {
+  --bg: #efe4cf;
+  --bg-elev: #f7eeda;
+  --fg: #43382a;
+  --fg-muted: #7a6a52;
+  --border: #d9c7a3;
+  --accent: #9c6b2f;
+  --accent-fg: #fff;
+  --link: #8a5a1f;
+}
+
+[data-theme="black"] {
+  --bg: #000000;
+  --bg-elev: #0d0d0d;
+  --fg: #c2c2c2;
+  --fg-muted: #707070;
+  --border: #262626;
+  --accent: #e0a060;
+  --accent-fg: #000;
+  --link: #6cb6ff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+a {
+  color: var(--link);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+.container {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* ---------- Header ---------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--bg-elev);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(6px);
+}
+.site-header .inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 56px;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+.site-header .brand {
+  font-weight: 700;
+  color: var(--fg);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.spacer {
+  flex: 1;
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-elev);
+  color: var(--fg);
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  transition: background 0.15s, border-color 0.15s;
+}
+.btn:hover {
+  border-color: var(--accent);
+}
+.btn.primary {
+  background: var(--accent);
+  color: var(--accent-fg);
+  border-color: var(--accent);
+}
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.btn.icon {
+  padding: 8px 10px;
+}
+
+/* ---------- Library (danh sách truyện) ---------- */
+.story-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin: 16px 0 40px;
+}
+.story-card {
+  display: block;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px;
+  background: var(--bg-elev);
+  color: var(--fg);
+  transition: border-color 0.15s, transform 0.1s;
+}
+.story-card:hover {
+  border-color: var(--accent);
+  text-decoration: none;
+  transform: translateY(-2px);
+}
+.story-card-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+.story-card-desc {
+  color: var(--fg-muted);
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 10px 0 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.continue-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid var(--accent);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin: 8px 0 20px;
+  background: var(--bg-elev);
+}
+.continue-card .btn {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 640px) {
+  .story-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .continue-card {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: left;
+  }
+  .continue-card .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ---------- Story info ---------- */
+.story-head {
+  padding: 28px 0 8px;
+}
+.story-head h1 {
+  font-size: 28px;
+  margin: 0 0 8px;
+  line-height: 1.25;
+}
+.meta-row {
+  color: var(--fg-muted);
+  font-size: 14px;
+  margin: 4px 0;
+}
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0;
+}
+.tag {
+  font-size: 12px;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--fg-muted);
+}
+.desc {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  white-space: pre-wrap;
+  line-height: 1.7;
+  margin: 16px 0;
+  max-height: 220px;
+  overflow: auto;
+}
+
+/* ---------- Chapter list ---------- */
+.toolbar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 16px 0;
+}
+.search {
+  flex: 1;
+  min-width: 200px;
+  padding: 9px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-elev);
+  color: var(--fg);
+  font-size: 14px;
+}
+.chapter-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.chapter-list li {
+  border-bottom: 1px solid var(--border);
+}
+.chapter-list li:last-child {
+  border-bottom: none;
+}
+.chapter-list a {
+  display: flex;
+  gap: 10px;
+  padding: 12px 16px;
+  color: var(--fg);
+}
+.chapter-list a:hover {
+  background: var(--bg-elev);
+  text-decoration: none;
+}
+.chapter-list .num {
+  color: var(--fg-muted);
+  min-width: 56px;
+  font-variant-numeric: tabular-nums;
+}
+.chapter-list a.read .ctitle {
+  color: var(--fg-muted);
+}
+.pager {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+.pager .page-info {
+  color: var(--fg-muted);
+  font-size: 14px;
+}
+
+/* ---------- Reader ---------- */
+.reader {
+  max-width: var(--reader-width);
+  margin: 0 auto;
+  padding: 24px 16px 120px;
+}
+.reader h1.ch-title {
+  font-size: 24px;
+  margin: 8px 0 24px;
+  text-align: center;
+  font-family: var(--reader-font-family);
+}
+.reader .content {
+  font-family: var(--reader-font-family);
+  font-size: var(--reader-font-size);
+  line-height: var(--reader-line-height);
+  color: var(--fg);
+}
+.reader .content p {
+  margin: 0 0 var(--reader-para-gap);
+  text-align: justify;
+}
+.reader-nav {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  max-width: var(--reader-width);
+  margin: 24px auto 0;
+}
+.reader-nav .btn {
+  flex: 1;
+  justify-content: center;
+}
+
+/* ---------- Bottom bar (reader) ---------- */
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  background: var(--bg-elev);
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  padding: 10px 16px;
+  flex-wrap: wrap;
+}
+
+/* ---------- Settings panel (desktop = side, mobile = bottom sheet) ---------- */
+.panel-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 100;
+  display: flex;
+  justify-content: flex-end;
+  animation: fade 0.15s ease;
+}
+@keyframes fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.panel {
+  width: min(380px, 100%);
+  background: var(--bg-elev);
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 20px;
+  padding-bottom: max(20px, env(safe-area-inset-bottom));
+  border-left: 1px solid var(--border);
+  animation: slideIn 0.2s ease;
+}
+@keyframes slideIn {
+  from { transform: translateX(20px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+.panel h3 {
+  margin: 0;
+  font-size: 18px;
+}
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.panel-header .panel-close {
+  flex: 0 0 auto !important;
+  width: 40px;
+  min-width: 40px;
+  height: 40px;
+  justify-content: center;
+  padding: 0;
+  font-size: 16px;
+}
+
+@media (max-width: 640px) {
+  .panel-overlay {
+    justify-content: stretch;
+    align-items: flex-end;
+  }
+  .panel {
+    width: 100%;
+    height: auto;
+    max-height: 85dvh;
+    border-left: none;
+    border-top: 1px solid var(--border);
+    border-radius: 16px 16px 0 0;
+    animation: slideUp 0.22s ease;
+  }
+  @keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+}
+.field {
+  margin: 18px 0;
+}
+.field label {
+  display: block;
+  font-size: 13px;
+  color: var(--fg-muted);
+  margin-bottom: 8px;
+}
+.seg {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.seg button {
+  flex: 1;
+  min-width: 60px;
+  padding: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--fg);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+}
+.seg button.active {
+  background: var(--accent);
+  color: var(--accent-fg);
+  border-color: var(--accent);
+}
+input[type="range"] {
+  width: 100%;
+}
+
+/* ---------- Misc ---------- */
+.empty {
+  text-align: center;
+  color: var(--fg-muted);
+  padding: 60px 0;
+}
+.progress-note {
+  font-size: 13px;
+  color: var(--fg-muted);
+  margin: 8px 0;
+}
+.kbd {
+  font-family: monospace;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 12px;
+  background: var(--bg);
+}
+
+/* ---------- Skeleton loading (khi tải chương động) ---------- */
+.skeleton-title,
+.skeleton-line {
+  background: linear-gradient(
+    90deg,
+    var(--border) 25%,
+    var(--bg-elev) 50%,
+    var(--border) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.2s infinite;
+  border-radius: 6px;
+}
+.skeleton-title {
+  height: 28px;
+  width: 60%;
+  margin: 8px auto 28px;
+}
+.skeleton-line {
+  height: 16px;
+  margin: 0 0 16px;
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ---------- Safe-area cho thanh dưới (iPhone notch) ---------- */
+.bottom-bar {
+  padding-bottom: max(10px, env(safe-area-inset-bottom));
+}
+
+/* =========================================================
+   RESPONSIVE — tối ưu cho điện thoại
+   ========================================================= */
+@media (max-width: 640px) {
+  .site-header .inner {
+    height: 50px;
+    gap: 8px;
+    padding: 0 12px;
+  }
+  .site-header .brand {
+    font-size: 15px;
+    max-width: 62vw;
+  }
+  .btn {
+    padding: 9px 12px;
+    font-size: 13px;
+  }
+
+  .story-head {
+    padding: 18px 0 4px;
+  }
+  .story-head h1 {
+    font-size: 22px;
+  }
+  .desc {
+    max-height: 160px;
+    font-size: 15px;
+  }
+
+  /* Reader: giảm padding ngang, chừa chỗ cho bottom-bar */
+  .reader {
+    padding: 16px 16px 96px;
+  }
+  .reader h1.ch-title {
+    font-size: 21px;
+    margin: 4px 0 18px;
+  }
+  /* ẩn nav giữa trang trên mobile — đã có bottom-bar cố định */
+  .reader-nav {
+    display: none;
+  }
+
+  /* Bottom bar: nút gọn, luôn vừa 1 hàng */
+  .bottom-bar {
+    gap: 6px;
+    padding: 8px 10px max(8px, env(safe-area-inset-bottom));
+  }
+  .bottom-bar .btn {
+    flex: 0 0 auto;
+    padding: 10px 14px;
+    font-size: 15px;
+  }
+  .bottom-bar .btn:nth-child(2) {
+    flex: 1;
+    justify-content: center;
+  }
+
+  /* Mục lục: dòng cao hơn cho dễ chạm */
+  .chapter-list a {
+    padding: 14px 14px;
+    font-size: 15px;
+  }
+  .chapter-list .num {
+    min-width: 44px;
+    font-size: 13px;
+  }
+
+  .toolbar {
+    gap: 6px;
+  }
+  .pager .btn {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+}
+
+/* Màn rất nhỏ: ẩn nhãn phụ */
+@media (max-width: 380px) {
+  .site-header .brand {
+    max-width: 55vw;
+  }
+}
+
+/* Tôn trọng prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  .panel,
+  .panel-overlay,
+  .skeleton-title,
+  .skeleton-line {
+    animation: none !important;
+    transition: none !important;
+  }
+}
